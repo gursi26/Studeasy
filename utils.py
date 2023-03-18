@@ -1,4 +1,5 @@
 import openai
+from PyPDF2 import PdfReader
 
 def load_api_key(file_path: str):
     with open(file_path, "r") as f:
@@ -11,3 +12,10 @@ def create_chat_object(file_path: str):
 
 def parse_results(chatgpt_output) -> str:
     return chatgpt_output["choices"][0]["message"]["content"]
+
+def parse_pdf(pdf_path: str) -> str:
+    reader = PdfReader(pdf_path)
+    text_body = ""
+    for page in reader.pages:
+        text_body += " " + page.extract_text()
+    return text_body

@@ -6,7 +6,8 @@ def note_generator(chat_completion: openai.ChatCompletion, outline: dict[str, li
     model_output = chat_completion.create(
         model = "gpt-3.5-turbo",
         messages = [
-            {"role": "system", "content":f"Your are a {level} {subject} notes generator."},
+            {"role": "system", "content":f"Your are a {level} {subject} notes generator. Generate notes in following format: \n Topic heading: \n \t Notes..."},
+            # {"role": "system", "content":f"Your are a {level} {subject} notes generator."},
             {"role": "user", "content":prompt}
         ]
     )
