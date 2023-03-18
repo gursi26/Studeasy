@@ -19,3 +19,11 @@ def parse_pdf(pdf_path: str) -> str:
     for page in reader.pages:
         text_body += " " + page.extract_text()
     return text_body
+
+def parse_pdf_from_flask_object(file_obj) -> str:
+    reader = PdfReader(file_obj)
+    text_body = ""
+    for page in reader.pages:
+        text_body += " " + page.extract_text()
+    return text_body
+
