@@ -49,6 +49,9 @@ def generate_summary(
         kw_idxs = np.where(arr_text == keyw)[0] / max_idx
         idxs = np.concatenate([idxs, kw_idxs])
 
+    if len(idxs) == 0:
+        return "This information is not available in the file."
+
     print("Clustering...")
     kmeans = KMeans(n_clusters = len(keywords))
     _ = kmeans.fit_predict(idxs.reshape(-1, 1))
