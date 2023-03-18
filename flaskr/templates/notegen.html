@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    {%block content%}
+    <form action = '/notegen' method="post">
+    <p>give note request:</p>
+    <input type="text"  placeholder="nm"  name="username" />
+    <input type="submit" value="submit" />
+    </form>
+    {%endblock%}
+    <!-- <form action="/forward" method="POST">
+        <label for="user-input">Enter your text:</label>
+        <input class="username" type="text" name="username">
+        <!-- <button type="button" onclick="logUserInput()">Submit</button> -->
+    </form>
+
+    <br>
+    {{ forward_message }}
+</body>
+</html>

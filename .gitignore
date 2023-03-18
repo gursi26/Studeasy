@@ -12,6 +12,21 @@
 profile_default/
 ipython_config.py
 
+venv/
+
+*.pyc
+__pycache__/
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
+
 # Remove previous ipynb_checkpoints
 #   git rm -r .ipynb_checkpoints/
 
