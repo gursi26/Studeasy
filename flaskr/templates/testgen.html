@@ -182,6 +182,14 @@
             inputField.type = 'text';
             inputField.id = key;
             inputField.name = key;
+            inputField.rows = 10;
+            inputField.cols = 90;
+
+
+            const feedback = document.createElement('label');
+            feedback.setAttribute('for', key);
+            feedback.textContent = key;
+            feedback.style.display = 'none';
 
             const submitButton = document.createElement('button');
             submitButton.type = 'submit';
@@ -189,9 +197,34 @@
 
             inputContainer.appendChild(inputLabel);
             inputContainer.appendChild(inputField);
+            inputContainer.appendChild(feedback);
             inputContainer.appendChild(submitButton);
 
             container.appendChild(inputContainer);
+
+
+            submitButton.addEventListener('click', function (e) {
+              console.log('clicked v2')
+
+              $.ajax({
+                type: 'POST',
+                url: '/testgen/grade_answer',
+                data: {
+                  question: key,
+                  myans: inputField.value,
+                  expected: label,
+                },
+                success: function (b) {
+                  console.log(b)
+
+                  feedback.style.display = 'block'
+                  feedback.textContent = b
+                },
+                error: function (b) {
+                  return
+                }
+              })
+            })
           }
         },
         error: function (b) {
@@ -208,24 +241,27 @@
   <!-- <p id="returned_message"></p> -->
 
   <style>
-
-.container {
+    .container {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+
     .input-container {
       display: flex;
       flex-direction: column;
       gap: 10px;
       align-items: center;
     }
+
     .input-container label {
       order: 1;
     }
+
     .input-container textarea {
       order: 2;
     }
+
     .input-container button {
       order: 3;
     }

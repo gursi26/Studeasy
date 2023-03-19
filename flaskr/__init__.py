@@ -148,22 +148,40 @@ def create_app(test_config=None):
         chatcomp = get_chatcomp()
 
         if request.method == 'POST':
-            # at_level = request.form['level']
-            # diff = request.form['diff']
-            # subject = request.form['subject']
-            # topic = request.form['topic']
-            # num_qs = request.form['numqs']
+            at_level = request.form['level']
+            diff = request.form['diff']
+            subject = request.form['subject']
+            topic = request.form['topic']
+            num_qs = request.form['numqs']
 
-            # ret = generate_questions(chatcomp,
-            #                at_level, subject, topic, diff, num_qs)
+            ret = generate_questions(chatcomp,
+                           at_level, subject, topic, diff, num_qs)
 
-            at_level = 'College'
-            diff = 'Hard'
-            subject = 'Mathematics'
-            topic = 'FTC'
-            num_qs = '10'
+            # at_level = 'College'
+            # diff = 'Hard'
+            # subject = 'Mathematics'
+            # topic = 'FTC'
+            # num_qs = '10'
 
-            ret = {'question1': 'answer1'}
+            # ret = {'question1': 'answer1'}
+            
+            return ret
+            # render_template('notegen.html', forward_message=final_ret)
+        else:
+            return ''
+            # render_template('notegen.html')
+    
+
+    @app.route("/testgen/grade_answer", methods=['POST','GET'])
+    def gradeans():
+        chatcomp = get_chatcomp()
+
+        if request.method == 'POST':
+            question = request.form['question']
+            provided = request.form['myans']
+            expected = request.form['expected']
+
+            ret = grade_answer(chatcomp, question, provided, expected)
             
             return ret
             # render_template('notegen.html', forward_message=final_ret)
