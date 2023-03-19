@@ -163,7 +163,7 @@ def create_app(test_config=None):
             # topic = 'FTC'
             # num_qs = '10'
 
-            # ret = {'question1': 'answer1'}
+            # ret = {'question1': 'answer1', 'question12': 'answer1', 'question12ac': 'answer1', 'questionquestion121': 'answer1', 'question12eq': 'answer1', 'question12bewb': 'answer1', 'questiquestion12qon12': 'answer1', 'question12mwevw': 'answer1'}
             
             return ret
             # render_template('notegen.html', forward_message=final_ret)
