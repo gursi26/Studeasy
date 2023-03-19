@@ -10,6 +10,7 @@ from syllabus_gen import *
 from doc_sum import *
 from note_gen import *
 from utils import *
+from test_companion import *
 
 
 def create_app(test_config=None):
@@ -122,7 +123,6 @@ def create_app(test_config=None):
     @app.route("/syllabusinfo", methods=['POST','GET'])
     def syllabusinfo():
         chatcomp = get_chatcomp()
-
         if request.method == 'POST':
             file_content = parse_pdf_from_flask_object(request.files.get('fileUpload'))
 
@@ -132,11 +132,8 @@ def create_app(test_config=None):
 
             for line in ret.strip().split('\n'):
                 if len(line) > 0 and line[-1] == ':':
-                    # temp_ind = max(0, ind_level - 1)
                     final_ret.append('<b>' + line + '</b><br/>')
-                    # ind_level = 1
                     continue
-                print(line)
                 final_ret.append('     ' + line + '<br/>')
 
             final_ret = ' '.join(final_ret)
@@ -151,31 +148,24 @@ def create_app(test_config=None):
         chatcomp = get_chatcomp()
 
         if request.method == 'POST':
-            at_level = request.form['level']
-            diff = request.form['diff']
-            subject = request.form['subject']
-            topic = request.form['topic']
-            num_qs = request.form['numqs']
+            # at_level = request.form['level']
+            # diff = request.form['diff']
+            # subject = request.form['subject']
+            # topic = request.form['topic']
+            # num_qs = request.form['numqs']
 
-            # prompt_req = json.loads(prompt_req)
-            # ret = test_generator(chatcomp,
-            #                prompt_req, at_level, subject)
+            # ret = generate_questions(chatcomp,
+            #                at_level, subject, topic, diff, num_qs)
 
-            # ret = at_level + diff + subject + topic + num_qs
+            at_level = 'College'
+            diff = 'Hard'
+            subject = 'Mathematics'
+            topic = 'FTC'
+            num_qs = '10'
 
             ret = {'question1': 'answer1'}
-
-            final_ret = []
-
-            for line in ret.strip().split('\n'):
-                if len(line) > 0 and line[-1] == ':':
-                    final_ret.append('<b>' + line + '</b><br/>')
-                    continue
-                final_ret.append('     ' + line + '<br/>')
-
-            final_ret = ' '.join(final_ret)
             
-            return final_ret
+            return ret
             # render_template('notegen.html', forward_message=final_ret)
         else:
             return ''

@@ -1,55 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Document</title>
 </head>
+
 <body>
-    <nav class="navbar">
-        <div class="navbar-left">
-            <a href="/" class="navbar-brand">Studeasy</a>
-        </div>
-        <div class="navbar-right">
-            <a href="/" class="navbar-link active">Home</a>
-        </div>
-    </nav>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/" class="navbar-brand">Studeasy</a>
+    </div>
+    <div class="navbar-right">
+      <a href="/" class="navbar-link active">Home</a>
+    </div>
+  </nav>
 
-    {%block content%}
-    <form id = 'testgenForm' method="POST">
-      <h2>Test Generator</h2>
+  {%block content%}
+  <form id='testgenForm' method="POST">
+    <h2>Test Generator</h2>
 
-        <div class="radio-group">
-        <h4>Subject</h4>
-        <input type="radio" id="math" name="subject" value="Mathematics">
-        <label for="math">Mathematics</label>
-        <input type="radio" id="physics" name="subject" value="Physics">
-        <label for="physics">Physics</label>
-        <input type="radio" id="chemistry" name="subject" value="Chemistry">
-        <label for="chemistry">Chemistry</label>
-        <input type="radio" id="biology" name="subject" value="Biology">
-        <label for="biology">Biology</label>
-        <input type="radio" id="compsci" name="subject" value="Computer Science">
-        <label for="compsci">Computer Science</label>
-        </div>
+    <div class="radio-group">
+      <h4>Subject</h4>
+      <input type="radio" id="math" name="subject" value="Mathematics">
+      <label for="math">Mathematics</label>
+      <input type="radio" id="physics" name="subject" value="Physics">
+      <label for="physics">Physics</label>
+      <input type="radio" id="chemistry" name="subject" value="Chemistry">
+      <label for="chemistry">Chemistry</label>
+      <input type="radio" id="biology" name="subject" value="Biology">
+      <label for="biology">Biology</label>
+      <input type="radio" id="compsci" name="subject" value="Computer Science">
+      <label for="compsci">Computer Science</label>
+    </div>
 
-        <div class="radio-group">
-          <h4>Difficulty</h4>
-          <input type="radio" id="easy" name="difficulty" value="Easy">
-          <label for="easy">Easy</label>
-          <input type="radio" id="medium" name="difficulty" value="Medium">
-          <label for="medium">Medium</label>
-          <input type="radio" id="hard" name="difficulty" value="Hard">
-          <label for="hard">Hard</label>
-          </div>
+    <div class="radio-group">
+      <h4>Difficulty</h4>
+      <input type="radio" id="easy" name="difficulty" value="Easy">
+      <label for="easy">Easy</label>
+      <input type="radio" id="medium" name="difficulty" value="Medium">
+      <label for="medium">Medium</label>
+      <input type="radio" id="hard" name="difficulty" value="Hard">
+      <label for="hard">Hard</label>
+    </div>
 
 
-        <div class="radio-group">
-          <h4>Level</h4>
+    <div class="radio-group">
+      <h4>Level</h4>
       <input type="radio" id="middle" name="level" value="Middle School">
       <label for="middle">Middle School</label>
       <input type="radio" id="highsch" name="level" value="High School">
@@ -57,254 +59,306 @@
       <input type="radio" id="college" name="level" value="College">
       <label for="college">College</label>
       <br>
-  </div>
-  <br>
-
-  <label for="topic_id">Enter a topic name:</label>
-  <textarea id="topic_id" name="topic_id" rows="1" cols="50"> </textarea>
-  <br>
-
-        <label for="num_questions">Enter the number of questions:</label>
-        <textarea id="num_questions" name="num_questions" rows="1" cols="50"> </textarea>
-
-        <br>
-        <input type="submit" value="submit" />
-    </form>
-    {%endblock%}
-
-	<div id="loading-bar">
-		<div id="loading-bar-progress"></div>
-	</div>
-
-    <script>
-        var sub_dict = {}
-
-        const loadingBar = document.getElementById("loading-bar");
-        loadingBar.style.visibility = "hidden";
-
-        const loadingBarProgress = document.getElementById("loading-bar-progress");
-        const loadingPercent = document.createElement("div");
-        loadingPercent.innerText = "0%";
-        loadingPercent.style.position = "absolute";
-        loadingPercent.style.top = "50%";
-        loadingPercent.style.left = "50%";
-        loadingPercent.style.transform = "translate(-50%, -50%)";
-        loadingBar.appendChild(loadingPercent);
-
-        var start = Date.now()
-        const duration = 15000;
-        var forceStop = false
-
-        function animateLoadingBar() {
-            const elapsed = Date.now() - start;
-            const percent = Math.min(Math.floor((elapsed / duration) * 100), 99);
-            loadingBarProgress.style.width = percent + "%";
-            loadingPercent.innerText = percent + "%";
-
-            if (forceStop) {
-                loadingBarProgress.style.width = "100%";
-                loadingPercent.innerText = "100%";
-                return
-            }
-
-            if (elapsed < duration) {
-                requestAnimationFrame(animateLoadingBar);
-            }
-        }
-
-        $(document).on('submit','#testgenForm',function(e) {
-            e.preventDefault();
-            let diff_radio1 = document.getElementById('easy');
-            let diff_radio2 = document.getElementById('medium');
-            let diff_radio3 = document.getElementById('hard');
-            if (diff_radio1.checked) dif_ret = 'Easy';
-            if (diff_radio2.checked) dif_ret = 'Medium';
-            if (diff_radio3.checked) dif_ret = 'Hard';
-
-            let level_radio1 = document.getElementById('middle');
-            let level_radio2 = document.getElementById('highsch');
-            let level_radio3 = document.getElementById('college');
-            if (level_radio1.checked) lev_ret = 'Middle';
-            if (level_radio2.checked) lev_ret = 'High School';
-            if (level_radio3.checked) lev_ret = 'College';
-
-            let subject_radio1 = document.getElementById('math');
-            let subject_radio2 = document.getElementById('physics');
-            let subject_radio3 = document.getElementById('chemistry');
-            let subject_radio4 = document.getElementById('biology');
-            let subject_radio5 = document.getElementById('compsci');
-            if (subject_radio1.checked) sub_ret = 'Mathematics';
-            if (subject_radio2.checked) sub_ret = 'Physics';
-            if (subject_radio3.checked) sub_ret = 'Chemistry';
-            if (subject_radio4.checked) sub_ret = 'Biology';
-            if (subject_radio5.checked) sub_ret = 'Computer Science';
-
-            if (!lev_ret) return;
-            if (!sub_ret) return;
-
-            loadingBar.style.visibility = "visible";
-
-            start = Date.now()
-                    forceStop = false
-                loadingBarProgress.style.width = "0%";
-                loadingPercent.innerText = "0%";
-            animateLoadingBar();
-
-            $.ajax({
-                type:'POST',
-                url:'/testgen',
-                data:{
-                    level:lev_ret,
-                    diff:dif_ret,
-                    subject:sub_ret,
-                    topic:$('#topic_id').val(),
-                    numqs:$('#num_questions').val()
-                },
-                success:function(b)
-                {
-                    forceStop = true
-                    loadingBarProgress.style.width = "100%";
-                    loadingPercent.innerText = "100%";
-                    document.getElementById('returned_message').innerHTML = b
-                },
-                error:function(b) {
-                    forceStop = true
-                    document.getElementById('returned_message').innerHTML = 'Something failed!'
-                }
-            })
-        });
-    </script>
-
+    </div>
     <br>
 
-    <p id="returned_message"></p>
+    <label for="topic_id">Enter a topic name:</label>
+    <textarea id="topic_id" name="topic_id" rows="1" cols="50"> </textarea>
+    <br>
 
-    <style>
-      h2 {
-    text-align: center;
-  }
+    <label for="num_questions">Enter the number of questions:</label>
+    <textarea id="num_questions" name="num_questions" rows="1" cols="50"> </textarea>
 
-  .radio-group {
-  display: inline-block;
-    flex-wrap: wrap;
-  }
-  .radio-group input[type="radio"] {
-    appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -o-appearance: none;
-  -ms-appearance: none;
-    margin-right: 10px;
-  }
-        /* Center the form on the page */
-        form {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-      
-        /* Style the form title */
-        form h4 {
-          font-size: 12px;
-          font-weight: bold;
-          margin-bottom: 10px;
-        }
-      
-        /* Style the radio buttons */
-        form input[type="radio"] {
-    appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -o-appearance: none;
-  -ms-appearance: none;
-          display: none;
-        }
-        form input[type="radio"] + label {
-    appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -o-appearance: none;
-  -ms-appearance: none;
-  display: inline-block;
-  margin-right: 20px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #e5e5e5;
-  color: #333;
-  font-size: 10px;
-  cursor: pointer;
-}
+    <br>
+    <input type="submit" value="submit" />
+  </form>
+  {%endblock%}
 
-form input[type="radio"]:checked + label {
-    appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -o-appearance: none;
-  -ms-appearance: none;
-  background-color: #333;
-  color: #fff;
-}
-      
-        /* Style the list input */
-        form div {
-          display: flex;
-          margin-top: 10px;
+  <div id="loading-bar">
+    <div id="loading-bar-progress"></div>
+  </div>
+
+  <script>
+    var sub_dict = {}
+
+    const loadingBar = document.getElementById("loading-bar");
+    loadingBar.style.visibility = "hidden";
+
+    const loadingBarProgress = document.getElementById("loading-bar-progress");
+    const loadingPercent = document.createElement("div");
+    loadingPercent.innerText = "0%";
+    loadingPercent.style.position = "absolute";
+    loadingPercent.style.top = "50%";
+    loadingPercent.style.left = "50%";
+    loadingPercent.style.transform = "translate(-50%, -50%)";
+    loadingBar.appendChild(loadingPercent);
+
+    var start = Date.now()
+    const duration = 15000;
+    var forceStop = false
+
+    function animateLoadingBar() {
+      const elapsed = Date.now() - start;
+      const percent = Math.min(Math.floor((elapsed / duration) * 100), 99);
+      loadingBarProgress.style.width = percent + "%";
+      loadingPercent.innerText = percent + "%";
+
+      if (forceStop) {
+        loadingBarProgress.style.width = "100%";
+        loadingPercent.innerText = "100%";
+        return
+      }
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animateLoadingBar);
+      }
+    }
+
+    $(document).on('submit', '#testgenForm', function (e) {
+      e.preventDefault();
+      let diff_radio1 = document.getElementById('easy');
+      let diff_radio2 = document.getElementById('medium');
+      let diff_radio3 = document.getElementById('hard');
+      if (diff_radio1.checked) dif_ret = 'Easy';
+      if (diff_radio2.checked) dif_ret = 'Medium';
+      if (diff_radio3.checked) dif_ret = 'Hard';
+
+      let level_radio1 = document.getElementById('middle');
+      let level_radio2 = document.getElementById('highsch');
+      let level_radio3 = document.getElementById('college');
+      if (level_radio1.checked) lev_ret = 'Middle';
+      if (level_radio2.checked) lev_ret = 'High School';
+      if (level_radio3.checked) lev_ret = 'College';
+
+      let subject_radio1 = document.getElementById('math');
+      let subject_radio2 = document.getElementById('physics');
+      let subject_radio3 = document.getElementById('chemistry');
+      let subject_radio4 = document.getElementById('biology');
+      let subject_radio5 = document.getElementById('compsci');
+      if (subject_radio1.checked) sub_ret = 'Mathematics';
+      if (subject_radio2.checked) sub_ret = 'Physics';
+      if (subject_radio3.checked) sub_ret = 'Chemistry';
+      if (subject_radio4.checked) sub_ret = 'Biology';
+      if (subject_radio5.checked) sub_ret = 'Computer Science';
+
+      if (!lev_ret) return;
+      if (!sub_ret) return;
+
+      loadingBar.style.visibility = "visible";
+
+      start = Date.now()
+      forceStop = false
+      loadingBarProgress.style.width = "0%";
+      loadingPercent.innerText = "0%";
+      animateLoadingBar();
+
+      $.ajax({
+        type: 'POST',
+        url: '/testgen',
+        data: {
+          level: lev_ret,
+          diff: dif_ret,
+          subject: sub_ret,
+          topic: $('#topic_id').val(),
+          numqs: $('#num_questions').val()
+        },
+        success: function (b) {
+          forceStop = true
+          loadingBarProgress.style.width = "100%";
+          loadingPercent.innerText = "100%";
+
+
+          const container = document.getElementById('container');
+
+          for (const [key, label] of Object.entries(b)) {
+            const inputContainer = document.createElement('div');
+            inputContainer.classList.add('input-container');
+
+            const inputLabel = document.createElement('label');
+            inputLabel.setAttribute('for', key);
+            inputLabel.textContent = key;
+
+            const inputField = document.createElement('textarea');
+            inputField.type = 'text';
+            inputField.id = key;
+            inputField.name = key;
+
+            const submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.textContent = 'Submit';
+
+            inputContainer.appendChild(inputLabel);
+            inputContainer.appendChild(inputField);
+            inputContainer.appendChild(submitButton);
+
+            container.appendChild(inputContainer);
+          }
+        },
+        error: function (b) {
+          forceStop = true
+          // document.getElementById('returned_message').innerHTML = 'Something failed!'
         }
-      
-        form div label {
-          display: none;
-        }
-      
-        form div input {
-          flex: 1;
-          padding: 10px;
-          border-radius: 10px;
-          border: none;
-          background-color: #e5e5e5;
-          color: #333;
-          font-size: 12px;
-        }
-      
-        form div button {
-          padding: 10px 20px;
-          border-radius: 10px;
-          border: none;
-          background-color: #333;
-          color: #fff;
-          font-size: 12px;
-          cursor: pointer;
-        }
-      
-        /* Style the list */
-        form ul {
-          list-style: none;
-          margin-top: 20px;
-          padding: 0;
-        }
-      
-        form li {
-          margin-bottom: 10px;
-          padding: 10px;
-          border-radius: 20px;
-          background-color: #e5e5e5;
-          color: #333;
-          font-size: 12px;
-        }
-      
-        /* Style the submit button */
-        form input[type="submit"] {
-          margin-top: 0px;
-          padding: 10px 20px;
-          border-radius: 20px;
-          border: none;
-          background-color: #333;
-          color: #fff;
-          font-size: 12px;
-          cursor: pointer;
-        }
-      </style>
-    <!-- <pre>> {{forward_message | safe}} </pre> -->
+      })
+    });
+  </script>
+
+  <br>
+
+  <div class="container" id="container"></div>
+  <!-- <p id="returned_message"></p> -->
+
+  <style>
+
+.container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .input-container label {
+      order: 1;
+    }
+    .input-container textarea {
+      order: 2;
+    }
+    .input-container button {
+      order: 3;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .radio-group {
+      display: inline-block;
+      flex-wrap: wrap;
+    }
+
+    .radio-group input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      -ms-appearance: none;
+      margin-right: 10px;
+    }
+
+    /* Center the form on the page */
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Style the form title */
+    form h4 {
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* Style the radio buttons */
+    form input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      -ms-appearance: none;
+      display: none;
+    }
+
+    form input[type="radio"]+label {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      -ms-appearance: none;
+      display: inline-block;
+      margin-right: 20px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      background-color: #e5e5e5;
+      color: #333;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    form input[type="radio"]:checked+label {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      -ms-appearance: none;
+      background-color: #333;
+      color: #fff;
+    }
+
+    /* Style the list input */
+    form div {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    form div label {
+      display: none;
+    }
+
+    form div input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background-color: #e5e5e5;
+      color: #333;
+      font-size: 12px;
+    }
+
+    form div button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: #333;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Style the list */
+    form ul {
+      list-style: none;
+      margin-top: 20px;
+      padding: 0;
+    }
+
+    form li {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 20px;
+      background-color: #e5e5e5;
+      color: #333;
+      font-size: 12px;
+    }
+
+    /* Style the submit button */
+    form input[type="submit"] {
+      margin-top: 0px;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      background-color: #333;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  </style>
+  <!-- <pre>> {{forward_message | safe}} </pre> -->
 
 </body>
+
 </html>
