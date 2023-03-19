@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    {%block content%}
+    <h1>Upload a File</h1>
+    <form action="/docsummarizer" enctype="multipart/form-data" method="post" id="upload-form">
+      <input type="file" name="fileUpload" id="fileUpload" required />
+      <br /> <br />
+      <textarea id="prompt_req" name="prompt_req" rows="4" cols="50"> </textarea>
+      <br>
+      <button type="submit">Upload</button>
+    </form>
+    <!-- <script>
+      const form = document.querySelector("#upload-form");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const fileInput = document.querySelector("#fileUpload");
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function () {
+          console.log(reader.result);
+        };
+      });
+    </script> -->
+    {%endblock%}
+
+    <br>
+
+    
+    <p>> {{returned | safe}} </p>
+
+</body>
+</html>

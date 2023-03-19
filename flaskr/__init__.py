@@ -1,11 +1,15 @@
-import os
+import os, json
 # flask --app hello run
 # flask --app flaskr run --debug
 
 # {{ url_for('static', filename='style.css') }}
 # {{ url_for('static', filename='script.js') }}
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, g, escape, redirect, url_for
+from note_gen import *
+from doc_sum import *
+from utils import *
+from web_utils import *
 
 
 def create_app(test_config=None):
@@ -29,6 +33,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    def get_chatcomp():
+        messages = getattr(g, '_chatcompletion', None)
+        if messages is None:
+            g._chatcompletion = create_chat_object('/Users/zain/Desktop/api_key.txt')
+
+        return g._chatcompletion
+
     # a simple page that says hello
     @app.route('/notegen')
     def notegen():
@@ -38,13 +49,70 @@ def create_app(test_config=None):
     def home():
         return render_template('index.html')
 
-    @app.route("/notegen", methods=['POST'])
+    @app.route("/notegen", methods=['POST','GET'])
     def move_forward():
-        if request.form['username']:
-            prompt_req = request.form['username']
+        chatcomp = get_chatcomp()
+
+        if request.method == 'POST':
+            print(request.form)
+
+            at_level = request.form['level']
+            subject = request.form['subject']
+            prompt_req = request.form['prompt_req']
+
+            # formatted_req = indented_string_to_dict(prompt_req)
+            prompt_req = json.loads(prompt_req)
+            ret = note_generator(chatcomp,
+                           prompt_req, at_level, subject)
+            # ret = 'hellow how to do'
+
+            # print(prompt_req)
+            # print(at_level, subject, prompt_req)
+
+            final_ret = []
+            # ind_level = 0
+
+            # print(ret)
+
+            for line in ret.strip().split('\n'):
+                if len(line) > 0 and line[-1] == ':':
+                    # temp_ind = max(0, ind_level - 1)
+                    final_ret.append('<b>' + line + '</b><br/>')
+                    # ind_level = 1
+                    continue
+                print(line)
+                final_ret.append('     ' + line + '<br/>')
+
+            final_ret = ' '.join(final_ret)
+
+            print(final_ret)
             
-            return render_template('notegen.html', forward_message=forward_message)
+            return final_ret
+            # render_template('notegen.html', forward_message=final_ret)
         else:
-            return render_template('notegen.html')
+            return ''
+            # render_template('notegen.html')
+    
+
+    @app.route("/docsummarizer", methods=['POST','GET'])
+    def summarize_doc():
+        chatcomp = get_chatcomp()
+
+        if request.method == 'POST':
+            prompt = request.form['prompt_req']
+
+            file_content = parse_pdf_from_flask_object(request.files.get('fileUpload'))
+
+            print(file_content)
+
+            print(chatcomp)
+            print(prompt)
+
+            ret = generate_summary(chatcomp, file_content, prompt)
+
+            return render_template('docsummarizer.html', returned=ret)
+        else:
+            return render_template('docsummarizer.html')
+
 
     return app

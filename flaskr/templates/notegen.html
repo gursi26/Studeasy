@@ -5,23 +5,199 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Document</title>
 </head>
 <body>
     {%block content%}
-    <form action = '/notegen' method="post">
-    <p>give note request:</p>
-    <input type="text"  placeholder="nm"  name="username" />
-    <input type="submit" value="submit" />
+    <!-- <form action = '/notegen' method="POST"> -->
+    <form id = 'notegenForm' method="POST">
+        <p>give note request:</p>
+        <input type="radio" id="middle" name="level" value="Middle School">
+        <label for="elemen">Middle School</label>
+        <input type="radio" id="highsch" name="level" value="High School">
+        <label for="highsch">High School</label>
+        <input type="radio" id="college" name="level" value="College">
+        <label for="college">College</label>
+        <br> <br>
+
+        <input type="radio" id="math" name="subject" value="Mathematics">
+        <label for="elmathemen">Mathematics</label>
+        <input type="radio" id="physics" name="subject" value="Physics">
+        <label for="physics">Physics</label>
+        <input type="radio" id="chemistry" name="subject" value="Chemistry">
+        <label for="chemistry">Chemistry</label>
+        <input type="radio" id="biology" name="subject" value="Biology">
+        <label for="biology">Biology</label>
+        <input type="radio" id="compsci" name="subject" value="Computer Science">
+        <label for="compsci">Computer Science</label>
+        <br> <br>
+
+        <div>
+            <label for="list-input">Enter list item:</label>
+            <input id="list-input" type="text">
+            <button id="add" >Add Item</button>
+        </div>
+        
+        <!-- <textarea id="prompt_req" name="prompt_req" rows="4" cols="50"> </textarea> -->
+        <ul name="ls_parse" class="ls_parse" id="ls_parse"> </ul>
+        <input type="submit" value="submit" />
     </form>
     {%endblock%}
-    <!-- <form action="/forward" method="POST">
-        <label for="user-input">Enter your text:</label>
-        <input class="username" type="text" name="username">
-        <!-- <button type="button" onclick="logUserInput()">Submit</button> -->
-    </form>
+
+    <!-- <script>
+        document.getElementById('prompt_req').addEventListener('keydown', function(e) {
+            if (e.key == 'Tab') {
+            e.preventDefault();
+        
+            this.value = this.value.substring(0, this.selectionStart) +
+                "\t" + this.value.substring(this.selectionEnd);
+        
+            this.selectionStart = this.selectionEnd = this.selectionStart + 1;
+            }
+        });
+    </script> -->
+
+	<div id="loading-bar">
+		<div id="loading-bar-progress"></div>
+	</div>
+
+
+    <script>
+        const loadingBar = document.getElementById("loading-bar");
+        const loadingBarProgress = document.getElementById("loading-bar-progress");
+        const loadingPercent = document.createElement("div");
+        loadingPercent.innerText = "0%";
+        loadingPercent.style.position = "absolute";
+        loadingPercent.style.top = "50%";
+        loadingPercent.style.left = "50%";
+        loadingPercent.style.transform = "translate(-50%, -50%)";
+        loadingBar.appendChild(loadingPercent);
+
+        const start = Date.now();
+        const duration = 15000;
+
+        function animateLoadingBar() {
+            const elapsed = Date.now() - start;
+            const percent = Math.min(Math.floor((elapsed / duration) * 100), 99);
+            console.log(percent)
+            loadingBarProgress.style.width = percent + "%";
+            loadingPercent.innerText = percent + "%";
+
+            if (elapsed < duration) {
+                requestAnimationFrame(animateLoadingBar);
+            }
+        }
+
+        animateLoadingBar();
+    </script>
+
+    <script>
+        var sub_dict = {}
+
+        document.getElementById('add').addEventListener('click', function(e) {
+            e.preventDefault();
+            const listInput = document.getElementById("list-input");
+            const listItemText = listInput.value.trim();
+            
+            if (listItemText) {
+                const listItem = document.createElement("li");
+                listItem.textContent = listItemText;
+                const subListButton = document.createElement("button");
+                subListButton.textContent = "+";
+                subListButton.onclick = addSubList;
+                listItem.appendChild(subListButton);
+                document.getElementById("ls_parse").appendChild(listItem);
+                listInput.value = "";
+                if (!sub_dict[listItemText]) {
+                    sub_dict[listItemText] = [];
+                }
+            }
+        }, false);
+        
+        function addSubList(event) {
+            // event.preventDefault()
+            const subListButton = event.target;
+            const subList = document.createElement("ul");
+            const subListItemInput = document.createElement("input");
+            const subListItemButton = document.createElement("button");
+            subListItemButton.textContent = "Add Subitem";
+            subListItemButton.onclick = addSubListItem;
+            subList.appendChild(subListItemInput);
+            subList.appendChild(subListItemButton);
+            subListButton.parentNode.appendChild(subList);
+            subListButton.remove();
+        }
+        
+        function addSubListItem(event) {
+            event.preventDefault()
+            const subListItemButton = event.target;
+            const subListItemInput = subListItemButton.previousSibling;
+            const subListItemText = subListItemInput.value.trim();
+
+            const subList = subListItemButton.parentNode;
+            const listItem = subList.parentNode;
+            const listName = listItem.firstChild.textContent.trim();
+
+			if (!sub_dict[listName]) {
+				sub_dict[listName] = [];
+			}
+
+            if (subListItemText) {
+                const subListItem = document.createElement("li");
+                subListItem.textContent = subListItemText;
+                subListItemInput.parentNode.insertBefore(subListItem, subListItemInput);
+                subListItemInput.value = "";
+				sub_dict[listName].push(subListItemText);
+            }
+        }
+
+        $(document).on('submit','#notegenForm',function(e) {
+            e.preventDefault();
+            let level_radio1 = document.getElementById('middle');
+            let level_radio2 = document.getElementById('highsch');
+            let level_radio3 = document.getElementById('college');
+            if (level_radio1.checked) lev_ret = 'Middle';
+            if (level_radio2.checked) lev_ret = 'High School';
+            if (level_radio3.checked) lev_ret = 'College';
+
+            let subject_radio1 = document.getElementById('math');
+            let subject_radio2 = document.getElementById('physics');
+            let subject_radio3 = document.getElementById('chemistry');
+            let subject_radio4 = document.getElementById('biology');
+            let subject_radio5 = document.getElementById('compsci');
+            if (subject_radio1.checked) sub_ret = 'Mathematics';
+            if (subject_radio2.checked) sub_ret = 'Physics';
+            if (subject_radio3.checked) sub_ret = 'Chemistry';
+            if (subject_radio4.checked) sub_ret = 'Biology';
+            if (subject_radio5.checked) sub_ret = 'Computer Science';
+
+            if (!lev_ret) return;
+            if (!sub_ret) return;
+
+
+
+            $.ajax({
+                type:'POST',
+                url:'/notegen',
+                data:{
+                    level:lev_ret,
+                    subject:sub_ret,
+                    prompt_req:JSON.stringify(sub_dict)
+                },
+                success:function(b)
+                {
+                    document.getElementById('returned_message').innerHTML = b
+                }
+            })
+        });
+    </script>
 
     <br>
-    {{ forward_message }}
+
+    <p id="returned_message"></p>
+    <!-- <pre>> {{forward_message | safe}} </pre> -->
+
 </body>
 </html>
