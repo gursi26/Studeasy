@@ -37,7 +37,7 @@ def create_app(test_config=None):
     def get_chatcomp():
         messages = getattr(g, '_chatcompletion', None)
         if messages is None:
-            g._chatcompletion = create_chat_object('/Users/gursi/Desktop/api_key.txt')
+            g._chatcompletion = create_chat_object('/Users/zain/Desktop/api_key.txt')
 
         return g._chatcompletion
 
