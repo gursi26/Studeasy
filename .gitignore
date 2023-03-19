@@ -23,6 +23,8 @@ instance/
 .coverage
 htmlcov/
 
+my_test.ipynb
+
 dist/
 build/
 *.egg-info/
