@@ -5,7 +5,7 @@ def generate_questions(chat_completion: openai.ChatCompletion, level: str, subje
     model_output = chat_completion.create(
         model = "gpt-3.5-turbo",
         messages = [
-            {"role": "system", "content":f"You are a {level} exam maker for the {subject} department. Your job is to generate the given number of question and answer pairs for questions of the given topic in the format: \n Question: \n Answer: \n\n"},
+            {"role": "system", "content":f"You are a {level} exam maker for the {subject} department. Your job is to generate the given number of question and answer pairs for questions of the given topic in the format. Do not number the questions: \n Question: \n Answer: \n\n"},
             {"role": "user", "content":f"Generate {str(num_questions)} of difficulty {difficulty} on {topic}"}
             ]
         )
