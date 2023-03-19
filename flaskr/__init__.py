@@ -94,12 +94,19 @@ def create_app(test_config=None):
             # render_template('notegen.html')
     
 
+    @app.route('/docsummarizer')
+    def docummari():
+        return render_template('docsummarizer.html')
+    
     @app.route("/docsummarizer", methods=['POST','GET'])
     def summarize_doc():
         chatcomp = get_chatcomp()
 
         if request.method == 'POST':
             prompt = request.form['prompt_req']
+
+            print(request.form)
+            print(request.files)
 
             file_content = parse_pdf_from_flask_object(request.files.get('fileUpload'))
 
@@ -110,9 +117,11 @@ def create_app(test_config=None):
 
             ret = generate_summary(chatcomp, file_content, prompt)
 
-            return render_template('docsummarizer.html', returned=ret)
+            return ret
+            # return render_template('docsummarizer.html', returned=ret)
         else:
-            return render_template('docsummarizer.html')
+            return ''
+            # return render_template('docsummarizer.html')
 
 
     return app

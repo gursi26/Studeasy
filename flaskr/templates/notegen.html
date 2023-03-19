@@ -10,8 +10,16 @@
     <title>Document</title>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="navbar-brand">Studeasy</a>
+        </div>
+        <div class="navbar-right">
+            <a href="/" class="navbar-link active">Home</a>
+        </div>
+    </nav>
+
     {%block content%}
-    <!-- <form action = '/notegen' method="POST"> -->
     <form id = 'notegenForm' method="POST">
         <p>give note request:</p>
         <input type="radio" id="middle" name="level" value="Middle School">
@@ -39,59 +47,15 @@
             <input id="list-input" type="text">
             <button id="add" >Add Item</button>
         </div>
-        
-        <!-- <textarea id="prompt_req" name="prompt_req" rows="4" cols="50"> </textarea> -->
+
         <ul name="ls_parse" class="ls_parse" id="ls_parse"> </ul>
         <input type="submit" value="submit" />
     </form>
     {%endblock%}
 
-    <!-- <script>
-        document.getElementById('prompt_req').addEventListener('keydown', function(e) {
-            if (e.key == 'Tab') {
-            e.preventDefault();
-        
-            this.value = this.value.substring(0, this.selectionStart) +
-                "\t" + this.value.substring(this.selectionEnd);
-        
-            this.selectionStart = this.selectionEnd = this.selectionStart + 1;
-            }
-        });
-    </script> -->
-
 	<div id="loading-bar">
 		<div id="loading-bar-progress"></div>
 	</div>
-
-
-    <script>
-        const loadingBar = document.getElementById("loading-bar");
-        const loadingBarProgress = document.getElementById("loading-bar-progress");
-        const loadingPercent = document.createElement("div");
-        loadingPercent.innerText = "0%";
-        loadingPercent.style.position = "absolute";
-        loadingPercent.style.top = "50%";
-        loadingPercent.style.left = "50%";
-        loadingPercent.style.transform = "translate(-50%, -50%)";
-        loadingBar.appendChild(loadingPercent);
-
-        const start = Date.now();
-        const duration = 15000;
-
-        function animateLoadingBar() {
-            const elapsed = Date.now() - start;
-            const percent = Math.min(Math.floor((elapsed / duration) * 100), 99);
-            console.log(percent)
-            loadingBarProgress.style.width = percent + "%";
-            loadingPercent.innerText = percent + "%";
-
-            if (elapsed < duration) {
-                requestAnimationFrame(animateLoadingBar);
-            }
-        }
-
-        animateLoadingBar();
-    </script>
 
     <script>
         var sub_dict = {}
@@ -153,6 +117,39 @@
             }
         }
 
+        const loadingBar = document.getElementById("loading-bar");
+        loadingBar.style.visibility = "hidden";
+
+        const loadingBarProgress = document.getElementById("loading-bar-progress");
+        const loadingPercent = document.createElement("div");
+        loadingPercent.innerText = "0%";
+        loadingPercent.style.position = "absolute";
+        loadingPercent.style.top = "50%";
+        loadingPercent.style.left = "50%";
+        loadingPercent.style.transform = "translate(-50%, -50%)";
+        loadingBar.appendChild(loadingPercent);
+
+        var start = Date.now()
+        const duration = 15000;
+        var forceStop = false
+
+        function animateLoadingBar() {
+            const elapsed = Date.now() - start;
+            const percent = Math.min(Math.floor((elapsed / duration) * 100), 99);
+            loadingBarProgress.style.width = percent + "%";
+            loadingPercent.innerText = percent + "%";
+
+            if (forceStop) {
+                loadingBarProgress.style.width = "100%";
+                loadingPercent.innerText = "100%";
+                return
+            }
+
+            if (elapsed < duration) {
+                requestAnimationFrame(animateLoadingBar);
+            }
+        }
+
         $(document).on('submit','#notegenForm',function(e) {
             e.preventDefault();
             let level_radio1 = document.getElementById('middle');
@@ -176,7 +173,10 @@
             if (!lev_ret) return;
             if (!sub_ret) return;
 
+            loadingBar.style.visibility = "visible";
 
+            start = Date.now()
+            animateLoadingBar();
 
             $.ajax({
                 type:'POST',
@@ -188,7 +188,14 @@
                 },
                 success:function(b)
                 {
+                    forceStop = true
+                    loadingBarProgress.style.width = "100%";
+                    loadingPercent.innerText = "100%";
                     document.getElementById('returned_message').innerHTML = b
+                },
+                error:function(b) {
+                    forceStop = true
+                    document.getElementById('returned_message').innerHTML = 'Something failed!'
                 }
             })
         });

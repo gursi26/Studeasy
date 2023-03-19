@@ -9,15 +9,26 @@
     <title>Document</title>
 </head>
 <body>
+  <nav class="navbar">
+      <div class="navbar-left">
+          <a href="#" class="navbar-brand">Studeasy</a>
+      </div>
+      <div class="navbar-right">
+          <a href="/" class="navbar-link active">Home</a>
+      </div>
+  </nav>
+  
     {%block content%}
     <h1>Upload a File</h1>
-    <form action="/docsummarizer" enctype="multipart/form-data" method="post" id="upload-form">
+    <!-- <form action="/docsummarizer" enctype="multipart/form-data" method="post" id="upload-form"> -->
+    <form enctype="multipart/form-data" method="post" id="upload-form">
       <input type="file" name="fileUpload" id="fileUpload" required />
       <br /> <br />
       <textarea id="prompt_req" name="prompt_req" rows="4" cols="50"> </textarea>
       <br>
       <button type="submit">Upload</button>
     </form>
+
     <!-- <script>
       const form = document.querySelector("#upload-form");
 
@@ -32,6 +43,50 @@
         };
       });
     </script> -->
+
+    <script>
+    $(document).on('submit','#upload-form',function(e) {
+            e.preventDefault();
+
+            // loadingBar.style.visibility = "visible";
+
+            // start = Date.now()
+            // animateLoadingBar();
+
+            const fileInput = document.querySelector("#fileUpload");
+            const file = fileInput.files[0];
+            // let formData = new FormData();           
+            // formData.append("file", file);
+            // formData.append('prompt_req',$("#prompt_req").val())
+
+            let reader = new FileReader();
+            reader.onload = () => {
+              console.log(reader.result);
+            };
+            reader.readAsArrayBuffer(file);
+
+            $.ajax({
+                type:'POST',
+                url:'/docsummarizer',
+                data:{
+                    prompt_req:$("#prompt_req").val(),
+                    fileUpload:$("#fileUpload").val()
+                },
+                success:function(b)
+                {
+                    forceStop = true
+                    loadingBarProgress.style.width = "100%";
+                    loadingPercent.innerText = "100%";
+                    document.getElementById('returned_message').innerHTML = b
+                },
+                error:function(b) {
+                    forceStop = true
+                    document.getElementById('returned_message').innerHTML = 'Something failed!'
+                }
+            })
+        });
+    </script>
+    
     {%endblock%}
 
     <br>
