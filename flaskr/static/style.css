@@ -3,28 +3,37 @@ p {
     white-space: normal;
 }
 
+body {
+  background: linear-gradient(135deg, #343a40, #495057);
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  /* text-shadow: 1px 1px #333; */
+}
+
 #loading-bar {
     width: 300px;
     height: 30px;
-    border: 1px solid black;
+    border: 1px solid rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
     position: relative;
 }
 
 #loading-bar-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background-color: green;
-    width: 0;
-    transition: width .4s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgb(114, 114, 114);
+  width: 0;
+  transition: width .4s ease-out;
+  margin: auto; /* add this line */
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .navbar {
@@ -74,15 +83,11 @@ p {
     font-weight: bold;
 }
 
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-  
-  body {
-    background-color: #ffffff;
-  }
+  } */
   
   .container {
     display: flex;

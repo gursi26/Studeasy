@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Document</title>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="navbar-brand">Studeasy</a>
+        </div>
+        <div class="navbar-right">
+            <a href="/" class="navbar-link">Home</a>
+            <a href="" class="navbar-link active">About</a>
+        </div>
+    </nav>
+
+    <h2><b>Inspiration</b></h2>>
+    Everyone knows students are lazy, but have we ever stopped to ask why? When analyzing our own study patterns, we realized that the biggest reason for our procrastination was not work, but the fact each task involved so much boilerplate work. Tasks as simple as looking for information in a textbook involved sorting through so much unnecessary text. Constructing three pages of revision notes for a test meant reading through 200 pages of a textbook. That is the problem we set out to solve. Removing the grunt work so that students can focus on what matter the most.
+
+<h2><b>What it does</b></h2>>
+Our project provides a suite of functionality for students, allowing them to greatly increase the rate at which they absorb information by removing the repetitive tasks from their routine. Some of our functionalities include:
+- A revision notes generator that can generate quick revision notes based on a given topic and level of comprehension.
+- A document summarizer that can read entire documents like textbooks and research papers within seconds and output a summary of a desired section.
+- A syllabus information extracter that extracts commonly required information such as assignment weightages, office hours, regrade and late submission policies, etc.
+
+<h2><b>How we built it</b></h2>>
+A tool that has taken the world by storm is ChatGPT, but it's limitations include the fact that it does not have access to information past 2019, which does not make it very useful for analyzing newer pieces of data.
+
+We used an API to the GPT 3.5 language model by OpenAI to complete the above tasks, engineering our input prompts so that the output is concise and accurate and matches the user's specifications. We also used clustering algorithms to identify where in the document desired keywords appear and identify the sections of relevant information.
+
+<h2><b>Accomplishments that we're proud of</b></h2>>
+- Creating a fully interactive website using Flask and Python <br>
+- Optimizing our inputs with the use of clustering <br>
+- Successfully engineering prompts to get acceptable outputs <br>
+- Creating a viable solution to a relatable, everyday problem
+
+<h2><b>What we learned</b></h2>>
+- We learned that using CSS and HTML templates is a good way to save time when making a website for a hackathon. <br>
+- We learned that training our own models is infeasible and using APIs is the best option.<br>
+- We learned to come up with ideas a few days prior to the hackathon, which gives us time for planning before we actually begin writing code.
+
+<style>
+    /* Style the headings */
+h2 {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: bold;
+  font-size: 32px;
+  margin-top: 60px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #d9d9d9;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Style the paragraphs */
+p {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  color: #3d3d3d;
+}
+
+/* Style the unordered list */
+ul {
+  list-style-type: disc;
+  margin: 0 0 30px;
+  padding-left: 20px;
+  color: #d9d9d9;
+}
+
+/* Style the list items */
+li {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/* Style the container for the headings and paragraphs */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Add a background gradient to the page */
+body {
+  /* background: linear-gradient(45deg, #6c63ff, #f66d9b); */
+  background-size: cover;
+}
+
+/* Add a border to the headings */
+h2:before, h2:after {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  width: 40%;
+  height: 1px;
+  background-color: #d9d9d9;
+}
+</style>
+</body>
+</html>

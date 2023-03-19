@@ -6,10 +6,10 @@ import os, json
 # {{ url_for('static', filename='script.js') }}
 
 from flask import Flask, render_template, request, g, escape, redirect, url_for
-from note_gen import *
+from syllabus_gen import *
 from doc_sum import *
+from note_gen import *
 from utils import *
-from web_utils import *
 
 
 def create_app(test_config=None):
@@ -44,6 +44,9 @@ def create_app(test_config=None):
     @app.route('/notegen')
     def notegen():
         return render_template('notegen.html')
+    @app.route('/testgen')
+    def testgen():
+        return render_template('testgen.html')
 
     @app.route('/')
     def home():
@@ -93,11 +96,14 @@ def create_app(test_config=None):
             return ''
             # render_template('notegen.html')
     
+    # @app.route('/docsummarizer')
+    # def docummari():
+    #     return render_template('docsummarizer.html')
 
-    @app.route('/docsummarizer')
-    def docummari():
-        return render_template('docsummarizer.html')
-    
+    @app.route("/about", methods=['POST','GET'])
+    def about_func():
+        return render_template('about.html')
+
     @app.route("/docsummarizer", methods=['POST','GET'])
     def summarize_doc():
         chatcomp = get_chatcomp()
@@ -105,23 +111,75 @@ def create_app(test_config=None):
         if request.method == 'POST':
             prompt = request.form['prompt_req']
 
-            print(request.form)
-            print(request.files)
-
             file_content = parse_pdf_from_flask_object(request.files.get('fileUpload'))
 
-            print(file_content)
+            ret = generate_summary(chatcomp, file_content, prompt, 700)
 
-            print(chatcomp)
-            print(prompt)
+            return render_template('docsummarizer.html', returned=ret)
+        else:
+            return render_template('docsummarizer.html')
+    
+    @app.route("/syllabusinfo", methods=['POST','GET'])
+    def syllabusinfo():
+        chatcomp = get_chatcomp()
 
-            ret = generate_summary(chatcomp, file_content, prompt)
+        if request.method == 'POST':
+            file_content = parse_pdf_from_flask_object(request.files.get('fileUpload'))
 
-            return ret
-            # return render_template('docsummarizer.html', returned=ret)
+            ret = generate_syllabus(chatcomp, file_content)
+
+            final_ret = []
+
+            for line in ret.strip().split('\n'):
+                if len(line) > 0 and line[-1] == ':':
+                    # temp_ind = max(0, ind_level - 1)
+                    final_ret.append('<b>' + line + '</b><br/>')
+                    # ind_level = 1
+                    continue
+                print(line)
+                final_ret.append('     ' + line + '<br/>')
+
+            final_ret = ' '.join(final_ret)
+
+            return render_template('syllabusinfo.html', returned=final_ret)
+        else:
+            return render_template('syllabusinfo.html')
+    
+
+    @app.route("/testgen", methods=['POST','GET'])
+    def testgenf():
+        chatcomp = get_chatcomp()
+
+        if request.method == 'POST':
+            at_level = request.form['level']
+            diff = request.form['diff']
+            subject = request.form['subject']
+            topic = request.form['topic']
+            num_qs = request.form['numqs']
+
+            # prompt_req = json.loads(prompt_req)
+            # ret = test_generator(chatcomp,
+            #                prompt_req, at_level, subject)
+
+            # ret = at_level + diff + subject + topic + num_qs
+
+            ret = {'question1': 'answer1'}
+
+            final_ret = []
+
+            for line in ret.strip().split('\n'):
+                if len(line) > 0 and line[-1] == ':':
+                    final_ret.append('<b>' + line + '</b><br/>')
+                    continue
+                final_ret.append('     ' + line + '<br/>')
+
+            final_ret = ' '.join(final_ret)
+            
+            return final_ret
+            # render_template('notegen.html', forward_message=final_ret)
         else:
             return ''
-            # return render_template('docsummarizer.html')
+            # render_template('notegen.html')
 
 
     return app

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+  <nav class="navbar">
+      <div class="navbar-left">
+          <a href="#" class="navbar-brand">Studeasy</a>
+      </div>
+      <div class="navbar-right">
+          <a href="/" class="navbar-link active">Home</a>
+      </div>
+  </nav>
+  
+    {%block content%}
+    <h2>Syllabus Information</h2>
+    <form action="/syllabusinfo" enctype="multipart/form-data" method="post" id="upload-form">
+    <!-- <form enctype="multipart/form-data" method="post" id="upload-form"> -->
+      <input type="file" name="fileUpload" id="fileUpload" required />
+      <br /> <br />
+      <button type="submit">Upload</button>
+    </form>
+    
+    {%endblock%}
+
+    <style>
+    h2 {
+  text-align: center;
+}
+    #upload-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 18px;
+      color: #333;
+    }
+    
+    #upload-form input[type="file"] {
+      border: none;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px;
+      background-color: #f7f7f7;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease-in-out;
+    }
+    
+    #upload-form input[type="file"]:hover {
+      background-color: #eee;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    #upload-form button[type="submit"] {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+    
+    #upload-form button[type="submit"]:hover {
+      background-color: #283593;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }</style>
+
+    <br>
+
+    <!-- <script>
+      const loadingBar = document.getElementById("loading-bar");
+      loadingBar.style.visibility = "hidden";
+        document.getElementById('upload-form').onsubmit = function() {
+        loadingBar.style.visibility = "visible";
+
+        const loadingBarProgress = document.getElementById("loading-bar-progress");
+        const loadingPercent = document.createElement("div");
+        loadingPercent.innerText = "0%";
+        loadingPercent.style.position = "absolute";
+        loadingPercent.style.top = "50%";
+        loadingPercent.style.left = "50%";
+        loadingPercent.style.transform = "translate(-50%, -50%)";
+        loadingBar.appendChild(loadingPercent);
+
+        var start = Date.now()
+        const duration = 15000;
+
+        function animateLoadingBar() {
+            const elapsed = Date.now() - start;
+            const percent = Math.min(Math.floor((elapsed / duration) * 100), 99);
+            loadingBarProgress.style.width = percent + "%";
+            loadingPercent.innerText = percent + "%";
+
+            if (forceStop) {
+                loadingBarProgress.style.width = "100%";
+                loadingPercent.innerText = "100%";
+                return
+            }
+
+            if (elapsed < duration) {
+                requestAnimationFrame(animateLoadingBar);
+            }
+        }
+        animateLoadingBar()
+        }
+
+    </script> -->
+    
+    <p>> {{returned | safe}} </p>
+
+</body>
+</html>

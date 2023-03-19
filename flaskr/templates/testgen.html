@@ -20,18 +20,8 @@
     </nav>
 
     {%block content%}
-    <form id = 'notegenForm' method="POST">
-      <h2>Note Generator</h2>
-        <div class="radio-group">
-            <h4>Level</h4>
-        <input type="radio" id="middle" name="level" value="Middle School">
-        <label for="middle">Middle School</label>
-        <input type="radio" id="highsch" name="level" value="High School">
-        <label for="highsch">High School</label>
-        <input type="radio" id="college" name="level" value="College">
-        <label for="college">College</label>
-        <br>
-    </div>
+    <form id = 'testgenForm' method="POST">
+      <h2>Test Generator</h2>
 
         <div class="radio-group">
         <h4>Subject</h4>
@@ -47,13 +37,37 @@
         <label for="compsci">Computer Science</label>
         </div>
 
-        <div>
-            <label for="list-input">Enter list item:</label>
-            <input id="list-input" type="text">
-            <button id="add" >Add Item</button>
-        </div>
+        <div class="radio-group">
+          <h4>Difficulty</h4>
+          <input type="radio" id="easy" name="difficulty" value="Easy">
+          <label for="easy">Easy</label>
+          <input type="radio" id="medium" name="difficulty" value="Medium">
+          <label for="medium">Medium</label>
+          <input type="radio" id="hard" name="difficulty" value="Hard">
+          <label for="hard">Hard</label>
+          </div>
 
-        <ul name="ls_parse" class="ls_parse" id="ls_parse"> </ul>
+
+        <div class="radio-group">
+          <h4>Level</h4>
+      <input type="radio" id="middle" name="level" value="Middle School">
+      <label for="middle">Middle School</label>
+      <input type="radio" id="highsch" name="level" value="High School">
+      <label for="highsch">High School</label>
+      <input type="radio" id="college" name="level" value="College">
+      <label for="college">College</label>
+      <br>
+  </div>
+  <br>
+
+  <label for="topic_id">Enter a topic name:</label>
+  <textarea id="topic_id" name="topic_id" rows="1" cols="50"> </textarea>
+  <br>
+
+        <label for="num_questions">Enter the number of questions:</label>
+        <textarea id="num_questions" name="num_questions" rows="1" cols="50"> </textarea>
+
+        <br>
         <input type="submit" value="submit" />
     </form>
     {%endblock%}
@@ -64,63 +78,6 @@
 
     <script>
         var sub_dict = {}
-
-        document.getElementById('add').addEventListener('click', function(e) {
-            e.preventDefault();
-            const listInput = document.getElementById("list-input");
-            const listItemText = listInput.value.trim();
-            
-            if (listItemText) {
-                const listItem = document.createElement("li");
-                listItem.textContent = listItemText;
-                const subListButton = document.createElement("button");
-                subListButton.textContent = "+";
-                subListButton.onclick = addSubList;
-                listItem.appendChild(subListButton);
-                document.getElementById("ls_parse").appendChild(listItem);
-                listInput.value = "";
-                if (!sub_dict[listItemText]) {
-                    sub_dict[listItemText] = [];
-                }
-            }
-        }, false);
-        
-        function addSubList(event) {
-            // event.preventDefault()
-            const subListButton = event.target;
-            const subList = document.createElement("ul");
-            const subListItemInput = document.createElement("input");
-            const subListItemButton = document.createElement("button");
-            subListItemButton.textContent = "Add Subitem";
-            subListItemButton.onclick = addSubListItem;
-            subList.appendChild(subListItemInput);
-            subList.appendChild(subListItemButton);
-            subListButton.parentNode.appendChild(subList);
-            subListButton.remove();
-        }
-        
-        function addSubListItem(event) {
-            event.preventDefault()
-            const subListItemButton = event.target;
-            const subListItemInput = subListItemButton.previousSibling;
-            const subListItemText = subListItemInput.value.trim();
-
-            const subList = subListItemButton.parentNode;
-            const listItem = subList.parentNode;
-            const listName = listItem.firstChild.textContent.trim();
-
-			if (!sub_dict[listName]) {
-				sub_dict[listName] = [];
-			}
-
-            if (subListItemText) {
-                const subListItem = document.createElement("li");
-                subListItem.textContent = subListItemText;
-                subListItemInput.parentNode.insertBefore(subListItem, subListItemInput);
-                subListItemInput.value = "";
-				sub_dict[listName].push(subListItemText);
-            }
-        }
 
         const loadingBar = document.getElementById("loading-bar");
         loadingBar.style.visibility = "hidden";
@@ -155,8 +112,15 @@
             }
         }
 
-        $(document).on('submit','#notegenForm',function(e) {
+        $(document).on('submit','#testgenForm',function(e) {
             e.preventDefault();
+            let diff_radio1 = document.getElementById('easy');
+            let diff_radio2 = document.getElementById('medium');
+            let diff_radio3 = document.getElementById('hard');
+            if (diff_radio1.checked) dif_ret = 'Easy';
+            if (diff_radio2.checked) dif_ret = 'Medium';
+            if (diff_radio3.checked) dif_ret = 'Hard';
+
             let level_radio1 = document.getElementById('middle');
             let level_radio2 = document.getElementById('highsch');
             let level_radio3 = document.getElementById('college');
@@ -188,11 +152,13 @@
 
             $.ajax({
                 type:'POST',
-                url:'/notegen',
+                url:'/testgen',
                 data:{
                     level:lev_ret,
+                    diff:dif_ret,
                     subject:sub_ret,
-                    prompt_req:JSON.stringify(sub_dict)
+                    topic:$('#topic_id').val(),
+                    numqs:$('#num_questions').val()
                 },
                 success:function(b)
                 {

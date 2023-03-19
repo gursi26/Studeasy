@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
     <title>Document</title>
 </head>
 <body>
   <nav class="navbar">
       <div class="navbar-left">
-          <a href="#" class="navbar-brand">Studeasy</a>
+          <a href="/" class="navbar-brand">Studeasy</a>
       </div>
       <div class="navbar-right">
           <a href="/" class="navbar-link active">Home</a>
@@ -19,15 +20,95 @@
   </nav>
   
     {%block content%}
-    <h1>Upload a File</h1>
-    <!-- <form action="/docsummarizer" enctype="multipart/form-data" method="post" id="upload-form"> -->
-    <form enctype="multipart/form-data" method="post" id="upload-form">
+    <h2>Document Summarizer</h2>
+    <form action="/docsummarizer" enctype="multipart/form-data" method="post" id="upload-form">
+      <div class="form-group">
+        <label for="fileUpload">Select file to upload:</label>
+        <input type="file" name="fileUpload" id="fileUpload" required />
+      </div>
+      <div class="form-group">
+        <label for="prompt_req">Enter a summary prompt:</label>
+        <textarea id="prompt_req" name="prompt_req" rows="4" cols="50"> </textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+    <!-- <form action="/docsummarizer" enctype="multipart/form-data" method="post" id="upload-form">
       <input type="file" name="fileUpload" id="fileUpload" required />
       <br /> <br />
       <textarea id="prompt_req" name="prompt_req" rows="4" cols="50"> </textarea>
       <br>
       <button type="submit">Upload</button>
-    </form>
+    </form> -->
+
+    <style>
+
+    h2 {
+  text-align: center;
+}
+
+#upload-form {
+  max-width: 500px;
+  margin: auto;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Style for form groups */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Style for labels */
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+/* Style for file input */
+input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for textarea */
+textarea {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for submit button */
+button[type="submit"] {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+    </style>
 
     <!-- <script>
       const form = document.querySelector("#upload-form");
@@ -44,7 +125,7 @@
       });
     </script> -->
 
-    <script>
+    <!-- <script>
     $(document).on('submit','#upload-form',function(e) {
             e.preventDefault();
 
@@ -85,7 +166,7 @@
                 }
             })
         });
-    </script>
+    </script> -->
     
     {%endblock%}
 
