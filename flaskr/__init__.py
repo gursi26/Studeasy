@@ -15,6 +15,7 @@ from test_companion import *
 
 def create_app(test_config=None):
     # create and configure the app
+    # test
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
