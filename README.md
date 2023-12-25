@@ -1,9 +1,8 @@
 # Studeasy
 
 A webapp that helps students streamline the process of studying by automating the boilerplate tasks with Large Language Models. Built with Flask, Scikit-Learn and the OpenAI GPT 3.5 API.\
-Winner of [Hack the Mist 2023](https://hack-the-mist.devpost.com/project-gallery).\
 
-[![Studeasy video demo](https://www.youtube.com/watch?v=_DHUyg3ke2E)](https://www.youtube.com/watch?v=_DHUyg3ke2E "Studeasy demo")
+Winner of [Hack the Mist 2023](https://hack-the-mist.devpost.com/project-gallery).
 
 # Features
 Our project provides a suite of functionality for students, allowing them to greatly increase the rate at which they absorb information by removing the repetitive tasks from their routine. Some of our functionalities include:
