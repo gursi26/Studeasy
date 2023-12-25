@@ -1,6 +1,6 @@
 # Studeasy
 
-A webapp that helps students streamline the process of studying by automating the boilerplate tasks with Large Language Models. Built with Flask, Scikit-Learn and the OpenAI GPT 3.5 API.\
+A webapp that helps students streamline the process of studying by automating the boilerplate tasks with Large Language Models. Built with Flask, Scikit-Learn and the OpenAI GPT 3.5 API.
 
 Winner of [Hack the Mist 2023](https://hack-the-mist.devpost.com/project-gallery).
 
